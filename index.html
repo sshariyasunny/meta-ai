@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>META AI — Automatic Meta Account Creator</title>
+<meta name="description" content="META AI - Powerful automation tool for creating Meta accounts automatically. Professional, fast and secure.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234F7CFF'/%3E%3Cstop offset='50%25' stop-color='%237C5CFF'/%3E%3Cstop offset='100%25' stop-color='%2300E0B8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)'/%3E%3Ctext x='50' y='68' font-size='55' font-weight='900' text-anchor='middle' fill='white' font-family='Arial'%3EM%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#04060d;
+  --bg-2:#080c18;
+  --card:#0d1322;
+  --card-2:#111828;
+  --border:rgba(255,255,255,.06);
+  --border-2:rgba(255,255,255,.1);
+  --text:#eef3ff;
+  --muted:#7f8bab;
+  --muted-2:#a2aecb;
+  --primary:#4f7cff;
+  --primary-2:#7c5cff;
+  --accent:#00e0b8;
+  --red:#ff2d55;
+  --red-glow:rgba(255,45,85,.45);
+  --green:#00e0b8;
+  --green-glow:rgba(0,224,184,.45);
+  --gold:#ffb400;
+  --gold-glow:rgba(255,180,0,.5);
+  --gradient:linear-gradient(135deg,#4f7cff 0%,#7c5cff 50%,#00e0b8 100%);
+  --gradient-green:linear-gradient(135deg,#00b894,#00e0b8,#4be0c4);
+  --gradient-gold:linear-gradient(135deg,#ff9500,#ffb400,#ffd60a);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.6;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 900px 700px at 20% 0%,rgba(79,124,255,.22),transparent 60%),
+    radial-gradient(ellipse 800px 600px at 80% 15%,rgba(124,92,255,.20),transparent 60%),
+    radial-gradient(ellipse 1000px 800px at 50% 100%,rgba(0,224,184,.12),transparent 60%);
+  z-index:-3;
+  pointer-events:none;
+}
+.grid-bg{
+  position:fixed;inset:0;z-index:-2;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:72px 72px;
+  mask-image:radial-gradient(ellipse at 50% 30%,black,transparent 75%);
+  -webkit-mask-image:radial-gradient(ellipse at 50% 30%,black,transparent 75%);
+  pointer-events:none;
+}
+.orb{
+  position:fixed;border-radius:50%;
+  filter:blur(120px);opacity:.25;z-index:-1;
+  pointer-events:none;will-change:transform;
+}
+.orb-1{width:500px;height:500px;background:#4f7cff;top:-180px;left:-180px;animation:float1 24s infinite ease-in-out}
+.orb-2{width:450px;height:450px;background:#7c5cff;bottom:-180px;right:-180px;animation:float2 30s infinite ease-in-out}
+.orb-3{width:400px;height:400px;background:#00e0b8;top:40%;left:50%;animation:float3 34s infinite ease-in-out}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(120px,-80px) scale(1.15)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-120px,70px) scale(1.2)}}
+@keyframes float3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-100px,-100px) scale(.85)}}
+
+/* ============ NAVBAR ============ */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:1000;
+  padding:18px 0;
+  transition:all .4s cubic-bezier(.2,.8,.2,1);
+}
+nav.scrolled{
+  background:rgba(4,6,13,.72);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid var(--border);
+  padding:12px 0;
+}
+.nav-inner{
+  max-width:1280px;margin:0 auto;padding:0 28px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.logo{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;
+  transition:.3s;
+}
+.logo-mark{
+  width:46px;height:46px;
+  flex-shrink:0;
+  filter:drop-shadow(0 6px 20px rgba(79,124,255,.4));
+  transition:.3s;
+}
+.logo:hover .logo-mark{
+  filter:drop-shadow(0 8px 28px rgba(79,124,255,.65));
+  transform:translateY(-2px);
+}
+.logo-mark svg{width:100%;height:100%;display:block}
+.logo-text{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:21px;font-weight:700;
+  letter-spacing:-.4px;
+  line-height:1;
+  display:flex;align-items:center;
+}
+.logo-text .meta{color:#fff}
+.logo-text .ai{
+  background:var(--gradient);
+  background-size:200% 200%;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  animation:gradientShift 5s ease infinite;
+}
+@keyframes gradientShift{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{
+  color:var(--muted-2);text-decoration:none;
+  font-weight:500;font-size:14.5px;
+  transition:.3s;position:relative;
+  padding:6px 0;
+  display:flex;align-items:center;gap:8px;
+}
+.nav-links a svg{width:15px;height:15px;opacity:.85}
+.nav-links a:hover{color:var(--text)}
+.nav-links a::after{
+  content:'';position:absolute;left:0;bottom:0;
+  width:0;height:1.5px;
+  background:var(--gradient);
+  transition:width .3s cubic-bezier(.2,.8,.2,1);
+  border-radius:2px;
+}
+.nav-links a:hover::after{width:100%}
+.nav-links .license-nav-btn{
+  padding:10px 20px;
+  background:linear-gradient(135deg,rgba(255,180,0,.15),rgba(255,149,0,.08));
+  border:1px solid rgba(255,180,0,.35);
+  border-radius:11px;
+  color:var(--gold);
+  font-weight:600;
+  font-size:13.5px;
+}
+.nav-links .license-nav-btn:hover{
+  background:linear-gradient(135deg,rgba(255,180,0,.25),rgba(255,149,0,.15));
+  border-color:rgba(255,180,0,.6);
+  box-shadow:0 8px 24px rgba(255,180,0,.3);
+  color:#ffd60a;
+  transform:translateY(-2px);
+}
+.nav-links .license-nav-btn::after{display:none}
+.nav-links .license-nav-btn svg{color:var(--gold)}
+
+.mobile-menu{
+  display:none;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  color:var(--text);cursor:pointer;
+  width:44px;height:44px;border-radius:12px;
+  transition:.3s;
+  place-items:center;
+}
+.mobile-menu svg{width:20px;height:20px}
+.mobile-menu:hover{background:rgba(255,255,255,.1)}
+
+/* ============ HERO ============ */
+.hero{
+  padding:150px 28px 60px;
+  max-width:1280px;margin:0 auto;
+  flex:1;position:relative;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+.hero-brand{
+  display:flex;flex-direction:column;
+  align-items:center;
+  text-align:center;
+  margin-bottom:40px;
+}
+.hero-logo{
+  width:120px;height:120px;
+  margin-bottom:26px;
+  filter:drop-shadow(0 24px 60px rgba(79,124,255,.55));
+  animation:logoFloat 6s ease-in-out infinite;
+  position:relative;
+}
+.hero-logo::before{
+  content:'';position:absolute;
+  inset:-30px;
+  background:radial-gradient(circle,rgba(79,124,255,.35),transparent 70%);
+  z-index:-1;
+  animation:pulseGlow 4s ease-in-out infinite;
+}
+@keyframes logoFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+@keyframes pulseGlow{
+  0%,100%{opacity:.6;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.1)}
+}
+.hero-logo svg{width:100%;height:100%;display:block}
+
+.hero-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(32px,4.5vw,44px);
+  font-weight:700;
+  letter-spacing:-1.2px;
+  line-height:1;
+  margin-bottom:10px;
+  display:flex;align-items:center;justify-content:center;
+  gap:6px;
+}
+.hero-name .meta{color:#fff}
+.hero-name .ai{
+  background:var(--gradient);
+  background-size:200% 200%;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  animation:gradientShift 5s ease infinite;
+}
+
+.hero-tagline{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--muted);
+  display:flex;align-items:center;gap:12px;
+}
+.hero-tagline::before,
+.hero-tagline::after{
+  content:'';width:40px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--primary),transparent);
+}
+
+.hero h1{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(34px,5vw,64px);
+  font-weight:700;
+  line-height:1.08;
+  letter-spacing:-2.2px;
+  text-align:center;
+  margin-bottom:24px;
+  max-width:880px;
+}
+.hero h1 .grad{
+  background:var(--gradient);
+  background-size:200% 200%;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  animation:gradientShift 5s ease infinite;
+}
+.hero p.sub{
+  font-size:clamp(15px,1.7vw,17px);
+  color:var(--muted-2);
+  max-width:620px;
+  text-align:center;
+  margin:0 auto 44px;
+  line-height:1.75;
+}
+
+.badge{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:8px 18px;border-radius:100px;
+  background:rgba(79,124,255,.08);
+  border:1px solid rgba(79,124,255,.22);
+  font-size:12.5px;font-weight:500;
+  color:#b3c4ff;
+  margin-bottom:36px;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+.badge .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 10px var(--accent),0 0 20px var(--accent);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.5;transform:scale(1.4)}
+}
+
+/* ============ DOWNLOAD CARD ============ */
+.download-card{
+  max-width:640px;
+  width:100%;
+  padding:48px 44px;
+  background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.008));
+  border:1px solid var(--border-2);
+  border-radius:28px;
+  position:relative;
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:0 40px 100px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08);
+  overflow:hidden;
+  isolation:isolate;
+  margin:0 auto 60px;
+}
+.download-card::before{
+  content:'';position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent 0deg,rgba(79,124,255,.3) 80deg,transparent 160deg,rgba(0,224,184,.25) 240deg,transparent 360deg);
+  animation:rotate 12s linear infinite;
+  z-index:-2;
+}
+.download-card::after{
+  content:'';position:absolute;
+  inset:1px;
+  background:linear-gradient(180deg,rgba(8,12,24,.96),rgba(4,6,13,.99));
+  border-radius:27px;
+  z-index:-1;
+}
+@keyframes rotate{to{transform:rotate(360deg)}}
+
+.product-name{text-align:center;margin-bottom:26px}
+.product-name .main-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:34px;font-weight:700;
+  letter-spacing:-1px;line-height:1.15;
+  background:linear-gradient(180deg,#ffffff,#b8c6ee);
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  display:block;margin-bottom:8px;
+}
+.product-name .main-name .accent{
+  background:var(--gradient);
+  background-size:200% 200%;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  animation:gradientShift 5s ease infinite;
+}
+.product-name .by-line{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:14px;font-weight:500;
+  color:var(--muted);
+  letter-spacing:.4px;
+  display:block;margin-bottom:16px;
+}
+.product-name .by-line .author{
+  color:#cfd9f5;font-weight:600;
+}
+.product-name .subtitle{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13.5px;font-weight:500;
+  color:#b3c4ff;
+  display:inline-block;
+  padding:8px 18px;
+  background:rgba(79,124,255,.08);
+  border:1px solid rgba(79,124,255,.2);
+  border-radius:100px;
+  letter-spacing:.1px;
+}
+
+.developer-block{
+  margin:24px 0 26px;
+  padding:15px 20px;
+  background:linear-gradient(135deg,rgba(255,45,85,.09),rgba(255,45,85,.02));
+  border:1px solid rgba(255,45,85,.22);
+  border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  gap:12px;flex-wrap:wrap;
+  position:relative;overflow:hidden;
+}
+.developer-block::before{
+  content:'';position:absolute;
+  top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,45,85,.18),transparent);
+  animation:shimmer 4s infinite;
+}
+@keyframes shimmer{
+  0%{left:-100%}
+  100%{left:200%}
+}
+.developer-block .label{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:11.5px;font-weight:700;
+  color:var(--muted-2);
+  text-transform:uppercase;
+  letter-spacing:2.2px;
+  position:relative;z-index:1;
+}
+.developer-block .dev-name{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:16px;font-weight:700;
+  color:var(--red);
+  text-shadow:0 0 20px var(--red-glow),0 0 40px rgba(255,45,85,.22);
+  letter-spacing:1.5px;
+  position:relative;z-index:1;
+  animation:redGlow 3s ease-in-out infinite;
+}
+@keyframes redGlow{
+  0%,100%{text-shadow:0 0 20px var(--red-glow),0 0 40px rgba(255,45,85,.22)}
+  50%{text-shadow:0 0 30px rgba(255,45,85,.75),0 0 60px rgba(255,45,85,.4)}
+}
+
+/* ============ LICENSE ALERT ============ */
+.license-alert{
+  margin-bottom:24px;
+  padding:18px 22px;
+  background:linear-gradient(135deg,rgba(255,180,0,.1),rgba(255,149,0,.04));
+  border:1px solid rgba(255,180,0,.3);
+  border-radius:16px;
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  position:relative;
+  overflow:hidden;
+}
+.license-alert::before{
+  content:'';position:absolute;
+  top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,180,0,.12),transparent);
+  animation:shimmer 3.5s infinite;
+}
+.license-alert .alert-icon{
+  width:38px;height:38px;
+  border-radius:11px;
+  background:var(--gradient-gold);
+  display:grid;place-items:center;
+  flex-shrink:0;
+  box-shadow:0 8px 20px rgba(255,180,0,.45);
+  position:relative;z-index:1;
+}
+.license-alert .alert-icon svg{
+  width:20px;height:20px;
+  color:#fff;
+}
+.license-alert .alert-text{
+  position:relative;z-index:1;
+  flex:1;
+}
+.license-alert .alert-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:14.5px;
+  font-weight:700;
+  color:#ffd60a;
+  margin-bottom:4px;
+  letter-spacing:-.1px;
+}
+.license-alert .alert-desc{
+  font-size:12.5px;
+  color:var(--muted-2);
+  line-height:1.55;
+  font-weight:500;
+}
+
+/* ============ DOWNLOAD OPTIONS ============ */
+.download-options{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  margin-bottom:20px;
+}
+
+.dl-option{
+  padding:22px 24px;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  text-decoration:none;
+  position:relative;
+  overflow:hidden;
+  transition:all .4s cubic-bezier(.2,.8,.2,1);
+  border:1px solid;
+}
+
+.dl-option.primary{
+  background:linear-gradient(135deg,rgba(79,124,255,.12),rgba(124,92,255,.08));
+  border-color:rgba(79,124,255,.3);
+}
+.dl-option.primary:hover{
+  transform:translateY(-3px);
+  border-color:rgba(79,124,255,.6);
+  box-shadow:0 20px 50px rgba(79,124,255,.35);
+  background:linear-gradient(135deg,rgba(79,124,255,.2),rgba(124,92,255,.12));
+}
+.dl-option.primary::before{
+  content:'';position:absolute;
+  top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(79,124,255,.15),transparent);
+  animation:shimmer 3s infinite;
+}
+
+.dl-option.secondary{
+  background:linear-gradient(135deg,rgba(0,224,184,.1),rgba(0,184,148,.05));
+  border-color:rgba(0,224,184,.28);
+}
+.dl-option.secondary:hover{
+  transform:translateY(-3px);
+  border-color:rgba(0,224,184,.55);
+  box-shadow:0 20px 50px rgba(0,224,184,.3);
+  background:linear-gradient(135deg,rgba(0,224,184,.18),rgba(0,184,148,.1));
+}
+.dl-option.secondary::before{
+  content:'';position:absolute;
+  top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(0,224,184,.15),transparent);
+  animation:shimmer 3s infinite;
+  animation-delay:1.5s;
+}
+
+.dl-option .option-icon{
+  width:52px;height:52px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+  transition:.3s;
+}
+.dl-option.primary .option-icon{
+  background:var(--gradient);
+  box-shadow:0 10px 24px rgba(79,124,255,.45);
+}
+.dl-option.secondary .option-icon{
+  background:var(--gradient-green);
+  box-shadow:0 10px 24px rgba(0,224,184,.4);
+}
+.dl-option:hover .option-icon{
+  transform:scale(1.08);
+}
+.dl-option .option-icon svg{
+  width:24px;height:24px;
+  color:#fff;
+}
+
+.dl-option .option-text{
+  flex:1;
+  position:relative;
+  z-index:1;
+  min-width:0;
+}
+.dl-option .option-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:16px;
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-.2px;
+  margin-bottom:4px;
+  display:block;
+}
+.dl-option .option-desc{
+  font-size:12.5px;
+  color:var(--muted-2);
+  display:block;
+  font-weight:500;
+}
+
+.dl-option .option-arrow{
+  width:22px;height:22px;
+  color:var(--muted-2);
+  flex-shrink:0;
+  position:relative;
+  z-index:1;
+  transition:.3s;
+}
+.dl-option:hover .option-arrow{
+  color:#fff;
+  transform:translateX(4px);
+}
+
+/* ============ LICENSE KEY SECTION ============ */
+.license-section{
+  margin-bottom:22px;
+  padding:24px 22px;
+  background:linear-gradient(135deg,rgba(255,180,0,.08),rgba(255,149,0,.03));
+  border:1px solid rgba(255,180,0,.28);
+  border-radius:18px;
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+}
+.license-section::before{
+  content:'';position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent 0deg,rgba(255,180,0,.2) 90deg,transparent 180deg,rgba(255,149,0,.15) 270deg,transparent 360deg);
+  animation:rotate 15s linear infinite;
+  pointer-events:none;
+  opacity:.6;
+}
+.license-section > *{position:relative;z-index:1}
+
+.license-icon-wrap{
+  width:64px;height:64px;
+  margin:0 auto 16px;
+  border-radius:18px;
+  background:var(--gradient-gold);
+  display:grid;place-items:center;
+  box-shadow:0 16px 40px rgba(255,180,0,.5),inset 0 2px 0 rgba(255,255,255,.3);
+  position:relative;
+}
+.license-icon-wrap::before{
+  content:'';position:absolute;
+  inset:-8px;
+  border-radius:24px;
+  background:var(--gradient-gold);
+  opacity:.35;
+  filter:blur(20px);
+  z-index:-1;
+}
+.license-icon-wrap svg{
+  width:32px;height:32px;
+  color:#fff;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.3));
+}
+
+.license-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:19px;
+  font-weight:700;
+  color:#ffd60a;
+  margin-bottom:8px;
+  letter-spacing:-.3px;
+}
+
+.license-desc{
+  font-size:13px;
+  color:var(--muted-2);
+  line-height:1.6;
+  max-width:420px;
+  margin:0 auto 20px;
+}
+
+.license-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:15px 32px;
+  border-radius:13px;
+  background:var(--gradient-gold);
+  background-size:200% 200%;
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+  font-size:15px;
+  font-family:'Space Grotesk',sans-serif;
+  letter-spacing:-.1px;
+  box-shadow:0 12px 32px rgba(255,180,0,.5),inset 0 1px 0 rgba(255,255,255,.3);
+  transition:all .3s cubic-bezier(.2,.8,.2,1);
+  position:relative;
+  overflow:hidden;
+  animation:goldGlow 3s ease-in-out infinite;
+}
+@keyframes goldGlow{
+  0%,100%{box-shadow:0 12px 32px rgba(255,180,0,.5),inset 0 1px 0 rgba(255,255,255,.3)}
+  50%{box-shadow:0 16px 48px rgba(255,180,0,.8),inset 0 1px 0 rgba(255,255,255,.4)}
+}
+.license-btn::before{
+  content:'';position:absolute;
+  top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+  transition:left .6s;
+}
+.license-btn:hover::before{left:100%}
+.license-btn:hover{
+  transform:translateY(-3px);
+}
+.license-btn svg{
+  width:20px;height:20px;
+  fill:currentColor;
+  flex-shrink:0;
+}
+
+.license-hint{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  margin-top:14px;
+  padding:7px 14px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border);
+  border-radius:100px;
+  font-size:11.5px;
+  color:var(--muted);
+  font-weight:500;
+}
+.license-hint svg{
+  width:13px;height:13px;
+  color:var(--gold);
+  flex-shrink:0;
+}
+.license-hint strong{
+  color:#ffd60a;
+  font-weight:700;
+  font-family:'Space Grotesk',sans-serif;
+}
+
+/* Divider */
+.divider{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin:0 0 22px;
+  color:var(--muted);
+  font-size:11.5px;
+  font-weight:600;
+  text-transform:uppercase;
+  letter-spacing:2px;
+}
+.divider::before,
+.divider::after{
+  content:'';flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--border),transparent);
+}
+
+.file-info{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:22px;
+  display:flex;justify-content:center;
+  gap:20px;flex-wrap:wrap;
+}
+.file-info span{
+  display:flex;align-items:center;gap:7px;
+  font-weight:500;
+}
+.file-info .ic{
+  width:15px;height:15px;color:var(--accent);
+  flex-shrink:0;
+}
+
+.dl-note{
+  font-size:12.5px;
+  color:var(--muted);
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  font-weight:500;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+}
+.dl-note svg{width:13px;height:13px;color:var(--accent);flex-shrink:0}
+
+/* ============ VIDEO SECTION ============ */
+.video-section{
+  padding:40px 28px 100px;
+  max-width:1280px;
+  margin:0 auto;
+  width:100%;
+}
+.video-head{
+  text-align:center;
+  margin-bottom:48px;
+}
+.video-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11.5px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  color:#ff4d6d;
+  margin-bottom:18px;
+  padding:7px 18px;
+  background:rgba(255,77,109,.08);
+  border:1px solid rgba(255,77,109,.2);
+  border-radius:100px;
+}
+.video-head h2{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(28px,3.8vw,44px);
+  font-weight:700;
+  letter-spacing:-1.4px;
+  line-height:1.15;
+  margin-bottom:14px;
+}
+.video-head h2 .grad{
+  background:linear-gradient(135deg,#ff2d55,#ff6b81);
+  background-size:200% 200%;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  animation:gradientShift 5s ease infinite;
+}
+.video-head p{
+  color:var(--muted-2);
+  font-size:15px;
+  max-width:520px;
+  margin:0 auto;
+}
+
+.video-wrapper{
+  display:block;
+  text-decoration:none;
+  cursor:pointer;
+  max-width:900px;
+  margin:0 auto;
+  position:relative;
+  border-radius:24px;
+  overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,45,85,.15),rgba(124,92,255,.1));
+  padding:3px;
+  box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 80px rgba(255,45,85,.15);
+  transition:.4s;
+}
+.video-wrapper:hover{
+  box-shadow:0 40px 100px rgba(0,0,0,.6),0 0 100px rgba(255,45,85,.35);
+  transform:translateY(-4px);
+}
+.video-wrapper::before{
+  content:'';position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent 0deg,rgba(255,45,85,.5) 90deg,transparent 180deg,rgba(124,92,255,.5) 270deg,transparent 360deg);
+  animation:rotate 8s linear infinite;
+  z-index:0;
+  pointer-events:none;
+}
+.video-inner{
+  position:relative;
+  z-index:1;
+  border-radius:22px;
+  overflow:hidden;
+  background:#000;
+  aspect-ratio:16/9;
+}
+.video-thumb{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.video-wrapper:hover .video-thumb{
+  transform:scale(1.05);
+}
+.video-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,.35) 55%,rgba(0,0,0,.88) 100%);
+  transition:.4s;
+  pointer-events:none;
+}
+.video-wrapper:hover .video-overlay{
+  background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,.45) 55%,rgba(0,0,0,.92) 100%);
+}
+.play-button{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:2;
+  filter:drop-shadow(0 8px 24px rgba(255,0,0,.5));
+  transition:all .4s cubic-bezier(.2,.8,.2,1);
+  pointer-events:none;
+}
+.video-wrapper:hover .play-button{
+  transform:translate(-50%,-50%) scale(1.15);
+  filter:drop-shadow(0 12px 36px rgba(255,0,0,.85));
+}
+.play-button svg{
+  width:88px;
+  height:62px;
+  display:block;
+}
+.video-text{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:26px 30px;
+  z-index:2;
+  text-align:left;
+  pointer-events:none;
+}
+.video-title{
+  display:block;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:18px;
+  font-weight:700;
+  color:#fff;
+  margin-bottom:5px;
+  letter-spacing:-.3px;
+  text-shadow:0 2px 12px rgba(0,0,0,.8);
+}
+.video-sub{
+  display:block;
+  font-size:13px;
+  color:rgba(255,255,255,.78);
+  font-weight:500;
+  text-shadow:0 2px 8px rgba(0,0,0,.8);
+}
+
+/* ============ TRUST BAR ============ */
+.trust-bar{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;
+  max-width:800px;
+  width:100%;
+  margin:0 auto;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 16px 50px rgba(0,0,0,.35);
+}
+.trust-item{
+  padding:24px 16px;
+  background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.005));
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  font-size:13.5px;color:var(--muted-2);font-weight:500;
+  transition:.3s;text-align:center;
+  letter-spacing:-.1px;
+}
+.trust-item:hover{
+  background:linear-gradient(180deg,rgba(79,124,255,.08),rgba(79,124,255,.015));
+}
+.trust-item .ic-wrap{
+  width:42px;height:42px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(79,124,255,.15),rgba(124,92,255,.1));
+  border:1px solid rgba(79,124,255,.2);
+  display:grid;place-items:center;
+  transition:.3s;
+}
+.trust-item:hover .ic-wrap{
+  background:var(--gradient);
+  border-color:transparent;
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 12px 28px rgba(79,124,255,.45);
+}
+.trust-item .ic-wrap svg{
+  width:19px;height:19px;
+  color:var(--primary);
+  transition:.3s;
+}
+.trust-item:hover .ic-wrap svg{color:#fff}
+
+/* ============ FEATURES ============ */
+.features-strip{
+  padding:100px 28px;
+  max-width:1280px;
+  margin:0 auto;
+  width:100%;
+}
+.strip-head{text-align:center;margin-bottom:64px}
+.strip-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11.5px;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  color:var(--primary);
+  margin-bottom:18px;
+  padding:7px 18px;
+  background:rgba(79,124,255,.07);
+  border:1px solid rgba(79,124,255,.18);
+  border-radius:100px;
+}
+.strip-head h2{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(28px,3.8vw,44px);
+  font-weight:700;
+  letter-spacing:-1.4px;
+  line-height:1.15;
+}
+.strip-head h2 .grad{
+  background:var(--gradient);
+  background-size:200% 200%;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;
+  animation:gradientShift 5s ease infinite;
+}
+
+.features{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+.feature{
+  padding:34px 28px;
+  background:linear-gradient(180deg,var(--card),var(--bg-2));
+  border:1px solid var(--border);
+  border-radius:20px;
+  transition:all .5s cubic-bezier(.2,.8,.2,1);
+  position:relative;
+  overflow:hidden;
+}
+.feature::before{
+  content:'';position:absolute;
+  top:0;left:50%;transform:translateX(-50%);
+  width:0;height:2px;
+  background:var(--gradient);
+  transition:width .5s cubic-bezier(.2,.8,.2,1);
+  border-radius:2px;
+}
+.feature:hover::before{width:65%}
+.feature:hover{
+  transform:translateY(-6px);
+  border-color:rgba(79,124,255,.35);
+  box-shadow:0 28px 65px rgba(79,124,255,.15),0 12px 30px rgba(0,0,0,.4);
+}
+.feature-icon{
+  width:56px;height:56px;
+  margin-bottom:20px;
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(79,124,255,.12),rgba(124,92,255,.12));
+  border:1px solid rgba(79,124,255,.22);
+  display:grid;place-items:center;
+  transition:all .5s cubic-bezier(.2,.8,.2,1);
+  position:relative;
+}
+.feature-icon::before{
+  content:'';position:absolute;inset:0;
+  border-radius:inherit;
+  background:var(--gradient);
+  opacity:0;transition:.4s;
+}
+.feature-icon svg{
+  width:26px;height:26px;
+  color:var(--primary);
+  position:relative;z-index:1;
+  transition:.4s;
+}
+.feature:hover .feature-icon{
+  transform:rotate(-6deg) scale(1.08);
+  border-color:transparent;
+  box-shadow:0 14px 32px rgba(79,124,255,.45);
+}
+.feature:hover .feature-icon::before{opacity:1}
+.feature:hover .feature-icon svg{color:#fff}
+.feature h3{
+  font-size:17px;font-weight:600;
+  margin-bottom:9px;
+  letter-spacing:-.3px;
+}
+.feature p{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.65;
+}
+
+/* ============ TELEGRAM ============ */
+.telegram-section{
+  padding:0 28px 80px;
+  max-width:1280px;
+  margin:0 auto;
+  width:100%;
+}
+.telegram-card{
+  max-width:600px;
+  margin:0 auto;
+  padding:44px 40px;
+  background:linear-gradient(135deg,rgba(0,136,204,.1),rgba(0,136,204,.02));
+  border:1px solid rgba(0,136,204,.25);
+  border-radius:24px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  transition:.4s;
+}
+.telegram-card::before{
+  content:'';position:absolute;
+  top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:radial-gradient(circle,rgba(0,136,204,.18),transparent 55%);
+  animation:rotate 22s linear infinite;
+  pointer-events:none;
+}
+.telegram-card > *{position:relative;z-index:1}
+.telegram-card:hover{
+  border-color:rgba(0,136,204,.55);
+  box-shadow:0 24px 70px rgba(0,136,204,.22);
+  transform:translateY(-4px);
+}
+.tg-icon{
+  width:68px;height:68px;
+  margin:0 auto 22px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#0088cc,#00a8e8);
+  display:grid;place-items:center;
+  box-shadow:0 18px 44px rgba(0,136,204,.5),inset 0 1px 0 rgba(255,255,255,.3);
+}
+.tg-icon svg{width:34px;height:34px;fill:#fff}
+.telegram-card h3{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:23px;font-weight:700;
+  letter-spacing:-.5px;
+  margin-bottom:10px;
+  color:#fff;
+}
+.telegram-card p{
+  color:var(--muted-2);
+  font-size:14.5px;
+  margin-bottom:26px;
+  max-width:400px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.tg-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:15px 30px;
+  border-radius:13px;
+  background:linear-gradient(135deg,#0088cc,#00a8e8);
+  color:#fff;text-decoration:none;
+  font-weight:600;font-size:15px;
+  font-family:'Inter',sans-serif;
+  letter-spacing:-.1px;
+  box-shadow:0 12px 32px rgba(0,136,204,.45),inset 0 1px 0 rgba(255,255,255,.25);
+  transition:all .3s cubic-bezier(.2,.8,.2,1);
+  position:relative;overflow:hidden;
+}
+.tg-btn::before{
+  content:'';position:absolute;
+  top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  transition:left .6s;
+}
+.tg-btn:hover::before{left:100%}
+.tg-btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 18px 44px rgba(0,136,204,.65),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.tg-btn svg{width:18px;height:18px;fill:currentColor}
+.tg-username{
+  display:block;
+  margin-top:16px;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13.5px;font-weight:600;
+  color:#5fb8e8;
+  letter-spacing:.6px;
+}
+
+/* ============ FOOTER ============ */
+footer{
+  padding:44px 28px 32px;
+  border-top:1px solid var(--border);
+  margin-top:40px;
+  position:relative;
+}
+footer::before{
+  content:'';position:absolute;
+  top:-1px;left:50%;transform:translateX(-50%);
+  width:min(600px,80%);height:1px;
+  background:linear-gradient(90deg,transparent,var(--primary),transparent);
+  opacity:.4;
+}
+.footer-inner{
+  max-width:1280px;margin:0 auto;
+  display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;
+  gap:22px;
+}
+.footer-brand{
+  display:flex;align-items:center;gap:11px;
+}
+.footer-brand .logo-mark{
+  width:34px;height:34px;
+  filter:drop-shadow(0 4px 14px rgba(79,124,255,.35));
+}
+.footer-brand .logo-text{font-size:16px}
+.footer-copy{
+  color:var(--muted);
+  font-size:13.5px;
+  text-align:center;
+  line-height:1.6;
+}
+.footer-copy .dev{
+  color:var(--red);
+  font-weight:700;
+  font-family:'Space Grotesk',sans-serif;
+  letter-spacing:.5px;
+  text-shadow:0 0 14px var(--red-glow);
+}
+.footer-tg{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 18px;
+  border-radius:11px;
+  background:rgba(0,136,204,.08);
+  border:1px solid rgba(0,136,204,.22);
+  color:#5fb8e8;
+  text-decoration:none;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13.5px;font-weight:600;
+  transition:.3s;
+}
+.footer-tg:hover{
+  background:rgba(0,136,204,.18);
+  border-color:rgba(0,136,204,.5);
+  transform:translateY(-3px);
+  box-shadow:0 12px 28px rgba(0,136,204,.3);
+  color:#7cc8f0;
+}
+.footer-tg svg{width:15px;height:15px;fill:currentColor}
+
+/* ============ REVEAL ============ */
+.reveal{
+  opacity:0;
+  transform:translateY(30px);
+  transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1);
+}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal.delay-1{transition-delay:.1s}
+.reveal.delay-2{transition-delay:.2s}
+.reveal.delay-3{transition-delay:.3s}
+.reveal.delay-4{transition-delay:.4s}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1000px){
+  .nav-links{gap:22px}
+}
+@media(max-width:900px){
+  .trust-bar{grid-template-columns:repeat(2,1fr)}
+  .nav-links .license-nav-btn{padding:9px 14px;font-size:12.5px}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .mobile-menu{display:grid}
+  .nav-links.show{
+    display:flex;
+    position:absolute;
+    top:100%;left:20px;right:20px;
+    flex-direction:column;
+    background:rgba(8,12,24,.98);
+    backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+    padding:26px 22px;
+    gap:20px;
+    border:1px solid var(--border-2);
+    border-radius:18px;
+    box-shadow:0 24px 60px rgba(0,0,0,.7);
+    margin-top:10px;
+  }
+  .nav-links.show a{width:100%;justify-content:center}
+  .nav-links.show .license-nav-btn{width:100%}
+  .hero{padding-top:120px;padding-bottom:40px}
+  .hero-logo{width:96px;height:96px;margin-bottom:22px}
+  .hero-name{font-size:30px}
+  .hero-tagline{font-size:11px;letter-spacing:2.5px}
+  .hero-tagline::before,
+  .hero-tagline::after{width:28px}
+  .download-card{padding:38px 24px;border-radius:24px}
+  .product-name .main-name{font-size:28px}
+  .product-name .subtitle{font-size:12.5px;padding:7px 14px}
+  .developer-block{padding:13px 16px;flex-direction:column;gap:5px}
+  .developer-block .dev-name{font-size:14.5px;letter-spacing:1.2px}
+  .dl-option{padding:18px 20px;gap:14px}
+  .dl-option .option-icon{width:46px;height:46px}
+  .dl-option .option-icon svg{width:22px;height:22px}
+  .dl-option .option-title{font-size:14.5px}
+  .dl-option .option-desc{font-size:11.5px}
+  .license-section{padding:22px 18px}
+  .license-icon-wrap{width:56px;height:56px}
+  .license-icon-wrap svg{width:28px;height:28px}
+  .license-title{font-size:17px}
+  .license-btn{padding:14px 26px;font-size:14px}
+  .video-section{padding:30px 20px 80px}
+  .play-button svg{width:70px;height:50px}
+  .video-text{padding:20px 22px}
+  .video-title{font-size:15px}
+  .video-sub{font-size:12px}
+  .features-strip{padding:70px 20px}
+  .feature{padding:28px 24px}
+  .telegram-section{padding:0 20px 60px}
+  .telegram-card{padding:36px 24px}
+  .telegram-card h3{font-size:20px}
+  .footer-inner{justify-content:center;text-align:center;flex-direction:column}
+}
+@media(max-width:480px){
+  .nav-inner{padding:0 18px}
+  .hero{padding:100px 16px 40px}
+  .hero-logo{width:84px;height:84px}
+  .hero-name{font-size:26px}
+  h1{letter-spacing:-1.3px}
+  .download-card{padding:28px 18px;border-radius:20px}
+  .product-name .main-name{font-size:24px}
+  .product-name .subtitle{font-size:11.5px;padding:6px 12px}
+  .dl-option{padding:16px 18px;gap:12px;border-radius:14px}
+  .dl-option .option-icon{width:42px;height:42px;border-radius:12px}
+  .dl-option .option-icon svg{width:20px;height:20px}
+  .dl-option .option-title{font-size:13.5px}
+  .dl-option .option-desc{font-size:11px}
+  .dl-option .option-arrow{width:18px;height:18px}
+  .license-section{padding:20px 16px}
+  .license-icon-wrap{width:52px;height:52px;border-radius:16px}
+  .license-icon-wrap svg{width:26px;height:26px}
+  .license-title{font-size:15.5px}
+  .license-desc{font-size:12px}
+  .license-btn{padding:13px 22px;font-size:13px;gap:8px}
+  .license-btn svg{width:17px;height:17px}
+  .license-hint{font-size:10.5px;padding:6px 12px}
+  .license-alert{padding:14px 16px;gap:11px}
+  .license-alert .alert-icon{width:34px;height:34px}
+  .license-alert .alert-icon svg{width:17px;height:17px}
+  .license-alert .alert-title{font-size:13px}
+  .license-alert .alert-desc{font-size:11.5px}
+  .file-info{gap:12px;font-size:12px}
+  .trust-bar{grid-template-columns:1fr 1fr;border-radius:16px}
+  .trust-item{padding:18px 12px;font-size:12.5px}
+  .trust-item .ic-wrap{width:38px;height:38px}
+  .trust-item .ic-wrap svg{width:17px;height:17px}
+  .developer-block .label{font-size:10.5px;letter-spacing:1.8px}
+  .developer-block .dev-name{font-size:13.5px}
+  .play-button svg{width:56px;height:40px}
+  .video-text{padding:16px 18px}
+  .video-title{font-size:13px}
+  .video-sub{font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="navLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4F7CFF"/>
+              <stop offset="50%" stop-color="#7C5CFF"/>
+              <stop offset="100%" stop-color="#00E0B8"/>
+            </linearGradient>
+            <linearGradient id="navInnerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0.85"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="60" height="60" rx="18" fill="url(#navLogoGrad)"/>
+          <rect x="2" y="2" width="60" height="60" rx="18" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+          <path d="M16 46V22C16 20.5 17 19.5 18.3 19.5C19.2 19.5 20 20 20.5 20.8L28.5 35L32 29.5L35.5 35L43.5 20.8C44 20 44.8 19.5 45.7 19.5C47 19.5 48 20.5 48 22V46"
+                stroke="url(#navInnerGrad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="48" cy="16" r="3" fill="#00FFD0"/>
+          <circle cx="48" cy="16" r="1.5" fill="#ffffff"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="meta">META</span><span class="ai">AI</span>
+      </div>
+    </a>
+
+    <div class="nav-links" id="navLinks">
+      <a href="#download">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download
+      </a>
+      <a href="#video">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="23 7 16 12 23 17 23 7"/>
+          <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+        </svg>
+        Setup Video
+      </a>
+      <a href="#features">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+        Features
+      </a>
+      <a href="https://t.me/sunny999?text=Hello%20SHARIYA%20SUNNY%2C%20I%20need%20a%20License%20Key%20for%20META%20AI%20Tool.%20Please%20provide%20me%20one."
+         target="_blank" rel="noopener"
+         class="license-nav-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+        </svg>
+        Get License
+      </a>
+    </div>
+
+    <button class="mobile-menu" onclick="toggleMenu()" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+
+  <div class="hero-brand reveal">
+    <div class="hero-logo">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="heroLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4F7CFF"/>
+            <stop offset="50%" stop-color="#7C5CFF"/>
+            <stop offset="100%" stop-color="#00E0B8"/>
+          </linearGradient>
+          <linearGradient id="heroInnerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.98"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.85"/>
+          </linearGradient>
+        </defs>
+        <rect x="2" y="2" width="60" height="60" rx="18" fill="url(#heroLogoGrad)"/>
+        <rect x="2" y="2" width="60" height="60" rx="18" fill="none" stroke="rgba(255,255,255,0.32)" stroke-width="1.2"/>
+        <path d="M16 46V22C16 20.5 17 19.5 18.3 19.5C19.2 19.5 20 20 20.5 20.8L28.5 35L32 29.5L35.5 35L43.5 20.8C44 20 44.8 19.5 45.7 19.5C47 19.5 48 20.5 48 22V46"
+              stroke="url(#heroInnerGrad)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="48" cy="16" r="3" fill="#00FFD0"/>
+        <circle cx="48" cy="16" r="1.5" fill="#ffffff"/>
+      </svg>
+    </div>
+    <div class="hero-name">
+      <span class="meta">META</span>
+      <span class="ai">AI</span>
+    </div>
+    <div class="hero-tagline">Automatic Meta Account Creator</div>
+  </div>
+
+  <div class="badge reveal delay-1">
+    <span class="dot"></span>
+    Latest Version 3.0 Available
+  </div>
+
+  <h1 class="reveal delay-2">
+    Create <span class="grad">Meta Accounts</span><br>
+    Automatically & Effortlessly
+  </h1>
+
+  <p class="sub reveal delay-3">
+    META AI is a powerful automation tool that lets you create multiple Meta accounts
+    with just a few clicks. Completely automated, incredibly fast, and securely built.
+  </p>
+
+  <!-- ===== DOWNLOAD CARD ===== -->
+  <div class="download-card reveal delay-4" id="download">
+
+    <div class="product-name">
+      <span class="main-name">Meta<span class="accent">AI</span></span>
+      <span class="by-line">By <span class="author">Sunny</span></span>
+      <span class="subtitle">Automatic Meta Account Creation Tool</span>
+    </div>
+
+    <div class="developer-block">
+      <span class="label">Developer</span>
+      <span class="dev-name">SHARIYA SUNNY</span>
+    </div>
+
+    <!-- LICENSE ALERT -->
+    <div class="license-alert">
+      <div class="alert-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+        </svg>
+      </div>
+      <div class="alert-text">
+        <div class="alert-title">License Key Required</div>
+        <div class="alert-desc">You need a valid license key to use this tool. Contact the developer to get your key.</div>
+      </div>
+    </div>
+
+    <div class="file-info">
+      <span>
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        ZIP Archive
+      </span>
+      <span>
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        100% Free
+      </span>
+      <span>
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Latest Version
+      </span>
+    </div>
+
+    <!-- DUAL DOWNLOAD OPTIONS -->
+    <div class="download-options">
+
+      <a href="https://www.mediafire.com/file/y7o2hp3qgcyza3c/MetaAI_Client_Release.zip/file"
+         target="_blank" rel="noopener"
+         class="dl-option primary">
+        <div class="option-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </div>
+        <div class="option-text">
+          <span class="option-title">Download Client</span>
+          <span class="option-desc">Main application — MetaAI_Client_Release.zip</span>
+        </div>
+        <svg class="option-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </a>
+
+      <a href="https://www.mediafire.com/file/6k69c81az1lvn95/google+seet+script.txt/file"
+         target="_blank" rel="noopener"
+         class="dl-option secondary">
+        <div class="option-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="9" y1="13" x2="15" y2="13"/>
+            <line x1="9" y1="17" x2="15" y2="17"/>
+          </svg>
+        </div>
+        <div class="option-text">
+          <span class="option-title">Google Sheet Script</span>
+          <span class="option-desc">Required script file — google sheet script.txt</span>
+        </div>
+        <svg class="option-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </a>
+
+    </div>
+
+    <div class="divider">License Key</div>
+
+    <!-- LICENSE KEY SECTION -->
+    <div class="license-section">
+      <div class="license-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+        </svg>
+      </div>
+      <div class="license-title">Get Your License Key</div>
+      <p class="license-desc">
+        To activate META AI, you need a valid license key.
+        Send a message to the developer on Telegram to request your license.
+      </p>
+      <a href="https://t.me/sunny999?text=Hello%20SHARIYA%20SUNNY%2C%20I%20need%20a%20License%20Key%20for%20META%20AI%20Tool.%20Please%20provide%20me%20one."
+         target="_blank" rel="noopener"
+         class="license-btn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+        </svg>
+        Message Developer for License
+      </a>
+      <div class="license-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 16v-4"/>
+          <path d="M12 8h.01"/>
+        </svg>
+        Contact on Telegram: <strong>@sunny999</strong>
+      </div>
+    </div>
+
+    <div class="dl-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      Verified & Secure Downloads
+    </div>
+  </div>
+
+  <!-- ===== TRUST BAR ===== -->
+  <div class="trust-bar reveal delay-4">
+    <div class="trust-item">
+      <div class="ic-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+      </div>
+      Ultra Fast
+    </div>
+    <div class="trust-item">
+      <div class="ic-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      100% Secure
+    </div>
+    <div class="trust-item">
+      <div class="ic-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      Saves Time
+    </div>
+    <div class="trust-item">
+      <div class="ic-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 4v6h-6"/>
+          <path d="M1 20v-6h6"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+      </div>
+      Auto Updates
+    </div>
+  </div>
+</section>
+
+<!-- ===== SETUP VIDEO ===== -->
+<section class="video-section" id="video">
+  <div class="video-head reveal">
+    <span class="video-tag">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+      Setup Tutorial
+    </span>
+    <h2>Watch The <span class="grad">Setup Video</span></h2>
+    <p>Follow this step-by-step tutorial to set up and start using META AI in minutes.</p>
+  </div>
+
+  <a href="https://youtu.be/V7kMe5VJgr8?si=zB2Gr6VQYVib_6rq"
+     target="_blank" rel="noopener"
+     class="video-wrapper reveal delay-1">
+    <div class="video-inner">
+      <img src="https://img.youtube.com/vi/V7kMe5VJgr8/maxresdefault.jpg"
+           alt="META AI Setup Tutorial"
+           class="video-thumb"
+           onerror="this.src='https://img.youtube.com/vi/V7kMe5VJgr8/hqdefault.jpg'">
+      <div class="video-overlay"></div>
+      <div class="play-button">
+        <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
+          <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26 c0.78,2.93,2.49,5.41,5.42,6.19C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19 C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#ff0000"/>
+          <path d="M 45,24 27,14 27,34" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="video-text">
+        <span class="video-title">META AI — Complete Setup Tutorial</span>
+        <span class="video-sub">Click to watch on YouTube</span>
+      </div>
+    </div>
+  </a>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features-strip" id="features">
+  <div class="strip-head reveal">
+    <span class="strip-tag">Features</span>
+    <h2>Why Choose <span class="grad">META AI</span></h2>
+  </div>
+
+  <div class="features">
+    <div class="feature reveal">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+      </div>
+      <h3>Lightning Fast</h3>
+      <p>Complete Meta account setup in just seconds with our optimized automation engine.</p>
+    </div>
+
+    <div class="feature reveal delay-1">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <h3>Highly Secure</h3>
+      <p>Advanced proxy rotation and fingerprint protection keep every account safe.</p>
+    </div>
+
+    <div class="feature reveal delay-2">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="10" rx="2"/>
+          <circle cx="12" cy="16" r="1"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <h3>Fully Automated</h3>
+      <p>Complete workflow automation — from start to finish, no manual input required.</p>
+    </div>
+
+    <div class="feature reveal delay-3">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+      </div>
+      <h3>Easy Interface</h3>
+      <p>Clean, intuitive design anyone can master in minutes — no technical skills needed.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TELEGRAM ===== -->
+<section class="telegram-section">
+  <div class="telegram-card reveal">
+    <div class="tg-icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+      </svg>
+    </div>
+    <h3>Need Support?</h3>
+    <p>Get in touch with us directly on Telegram for instant help and updates.</p>
+    <a href="https://t.me/sunny999" target="_blank" rel="noopener" class="tg-btn">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+      </svg>
+      Message on Telegram
+    </a>
+    <span class="tg-username">@sunny999</span>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo-mark">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="footLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4F7CFF"/>
+              <stop offset="50%" stop-color="#7C5CFF"/>
+              <stop offset="100%" stop-color="#00E0B8"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="60" height="60" rx="18" fill="url(#footLogoGrad)"/>
+          <rect x="2" y="2" width="60" height="60" rx="18" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+          <path d="M16 46V22C16 20.5 17 19.5 18.3 19.5C19.2 19.5 20 20 20.5 20.8L28.5 35L32 29.5L35.5 35L43.5 20.8C44 20 44.8 19.5 45.7 19.5C47 19.5 48 20.5 48 22V46"
+                stroke="white" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <circle cx="48" cy="16" r="3" fill="#00FFD0"/>
+          <circle cx="48" cy="16" r="1.5" fill="#ffffff"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="meta">META</span><span class="ai">AI</span>
+      </div>
+    </div>
+
+    <div class="footer-copy">
+      © 2025 META AI — All Rights Reserved.<br>
+      Developed by <span class="dev">SHARIYA SUNNY</span>
+    </div>
+
+    <a href="https://t.me/sunny999" target="_blank" rel="noopener" class="footer-tg">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+      </svg>
+      @sunny999
+    </a>
+  </div>
+</footer>
+
+<script>
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{
+  navbar.classList.toggle('scrolled',window.scrollY>20);
+},{passive:true});
+
+function toggleMenu(){
+  document.getElementById('navLinks').classList.toggle('show');
+}
+document.querySelectorAll('#navLinks a').forEach(a=>{
+  a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('show'));
+});
+
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+      observer.unobserve(e.target);
+    }
+  });
+},{threshold:.12,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener('click',e=>{
+    const href=link.getAttribute('href');
+    if(href==='#')return;
+    const target=document.querySelector(href);
+    if(target){
+      e.preventDefault();
+      const offset=target.getBoundingClientRect().top+window.scrollY-90;
+      window.scrollTo({top:offset,behavior:'smooth'});
+    }
+  });
+});
+</script>
+</body>
+</html>
