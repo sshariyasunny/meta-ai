@@ -6,13 +6,10 @@ Official repository for META AI automation tool website.
 
 ---
 
-### 📥 Downloads
+### 📥 Download
 
 - **MetaAI Client (Main Application)**:  
   [Download MetaAI_Client_Release.zip](https://www.mediafire.com/file/y7o2hp3qgcyza3c/MetaAI_Client_Release.zip/file)
-
-- **Google Sheet Script**:  
-  [Download google sheet script.txt](https://www.mediafire.com/file/6k69c81az1lvn95/google+seet+script.txt/file)
 
 ---
 
